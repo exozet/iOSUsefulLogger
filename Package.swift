@@ -22,8 +22,5 @@ let package = Package(
         .target(
             name: "UsefulLogger",
             dependencies: ["iOSCoreUsefulSDK"]),
-        .testTarget(
-            name: "UsefulLoggerTests",
-            dependencies: ["UsefulLogger", "iOSCoreUsefulSDK"]),
     ]
 )

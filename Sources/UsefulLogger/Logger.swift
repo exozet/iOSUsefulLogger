@@ -53,6 +53,33 @@ public class Logger: LoggingDelegate {
         LoggingManager.delegate = Logger.shared
     }
     
+    /// Returns content inside of the log file.
+    /// - returns: All contents inside of the log file.
+    public class func getLogContent() -> String? {
+        guard let data = Logger.shared.getLogData() else {
+            return nil
+        }
+        
+        return String(data: data, encoding: .utf8)
+    }
+    
+    /// Clears all the content in the file.
+    public class func clearLogs() {
+        let destPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+        let fullDestPath = NSURL(fileURLWithPath: destPath).appendingPathComponent("\(Logger.fileName).log")
+        let fullDestPathString = fullDestPath!.path
+        do {
+            try "".write(toFile: fullDestPathString, atomically: true, encoding: String.Encoding.utf8)
+        } catch {
+            NSLog("Can't write to file to device directory - Error: \(error.localizedDescription)")
+        }
+        
+        Logger.shared.log(message: "Log file is cleared",
+                          level: .warning,
+                          domain: .service,
+                          source: "Logger.clearLogs")
+    }
+    
     // MARK: - Private
     
     /// File handler.
@@ -66,7 +93,7 @@ public class Logger: LoggingDelegate {
         }}
     
     /// Private shared instance.
-    private static let shared = Logger()
+    internal static let shared = Logger()
     
     private weak var logDelegate: LoggingDelegate?
     
@@ -102,28 +129,18 @@ public class Logger: LoggingDelegate {
         if let logData = logStr.data(using: String.Encoding.utf8) {
             handler?.write(logData)
         }
-//
-//        var willLogged = String(format: format, args)
-//        let maxCount = 1000
-//        let div:Int = willLogged.count/maxCount
-//        if div > 0 {
-//            for i in 0..<div {
-//                var newStr = willLogged
-//                newStr.removeLast(willLogged.count-((div-i)*maxCount))
-//
-//                if i > 0 {
-//                    newStr = "... Continues - \(newStr)"
-//                }
-//
-//                NSLog(newStr)
-//                willLogged.removeFirst(maxCount)
-//            }
-//
-//            willLogged = "... Continues - \(willLogged) - END"
-//            NSLog(willLogged)
-//        } else {
-//            NSLog(willLogged)
-//        }
+    }
+    
+    /// Returns data inside the log file.
+    internal func getLogData() -> Data? {
+        let destPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+        let fullDestPath = NSURL(fileURLWithPath: destPath).appendingPathComponent("\(self.logFileName).log")
+        let fullDestPathString = fullDestPath!.path
+        if !FileManager.default.fileExists(atPath: fullDestPathString) {
+            return FileManager.default.contents(atPath: fullDestPathString)
+        }
+        
+        return nil
     }
     
     /// Deletes log file with the given name.
