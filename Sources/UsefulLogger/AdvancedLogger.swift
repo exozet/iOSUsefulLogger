@@ -1,4 +1,4 @@
-// Logger.swift
+// AdvancedLogger.swift
 //
 // Copyright (c) 2020 Burak Uzunboy
 //
@@ -24,14 +24,14 @@ import Foundation
 import CoreUsefulSDK
 
 /// Useful Logger class with advanced logging features.
-public class Logger: LoggingDelegate {
+public class AdvancedLogger: LoggingDelegate {
     
     // MARK: - Public Properties
     
     /// Name of the log file which will be stored in the device storage.
     public class var fileName: String {
-        get { return Logger.shared.logFileName }
-        set { Logger.shared.logFileName = newValue }
+        get { return AdvancedLogger.shared.logFileName }
+        set { AdvancedLogger.shared.logFileName = newValue }
     }
     
     /// Minimum level to write logs into file.
@@ -39,8 +39,8 @@ public class Logger: LoggingDelegate {
     
     /// Set listener to get logs received to this service.
     public class var delegate: LoggingDelegate? {
-        get { return Logger.shared.logDelegate }
-        set { return Logger.shared.logDelegate = newValue }
+        get { return AdvancedLogger.shared.logDelegate }
+        set { return AdvancedLogger.shared.logDelegate = newValue }
     }
     
     /// Starts listening logs from `LoggingManager`.
@@ -50,13 +50,13 @@ public class Logger: LoggingDelegate {
     ///
     /// Otherwise, call this method again to give service a chance to listen again the logs.
     public class func startListening() {
-        LoggingManager.delegate = Logger.shared
+        LoggingManager.delegate = AdvancedLogger.shared
     }
     
     /// Returns content inside of the log file.
     /// - returns: All contents inside of the log file.
     public class func getLogContent() -> String? {
-        guard let data = Logger.shared.getLogData() else {
+        guard let data = AdvancedLogger.shared.getLogData() else {
             return nil
         }
         
@@ -66,7 +66,7 @@ public class Logger: LoggingDelegate {
     /// Clears all the content in the file.
     public class func clearLogs() {
         let destPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-        let fullDestPath = NSURL(fileURLWithPath: destPath).appendingPathComponent("\(Logger.fileName).log")
+        let fullDestPath = NSURL(fileURLWithPath: destPath).appendingPathComponent("\(AdvancedLogger.fileName).log")
         let fullDestPathString = fullDestPath!.path
         do {
             try "".write(toFile: fullDestPathString, atomically: true, encoding: String.Encoding.utf8)
@@ -74,7 +74,7 @@ public class Logger: LoggingDelegate {
             NSLog("Can't write to file to device directory - Error: \(error.localizedDescription)")
         }
         
-        Logger.shared.log(message: "Log file is cleared",
+        AdvancedLogger.shared.log(message: "Log file is cleared",
                           level: .warning,
                           domain: .service,
                           source: "Logger.clearLogs")
@@ -93,7 +93,7 @@ public class Logger: LoggingDelegate {
         }}
     
     /// Private shared instance.
-    internal static let shared = Logger()
+    internal static let shared = AdvancedLogger()
     
     private weak var logDelegate: LoggingDelegate?
     
@@ -161,7 +161,7 @@ public class Logger: LoggingDelegate {
     // MARK: - Log Delegate
     public func log(message: String, level: LogLevel, domain: LogDomain, source: String) {
         var minimumLevel = 0
-        switch Logger.minimumLogLevel {
+        switch AdvancedLogger.minimumLogLevel {
         case .verbose:
             minimumLevel = 0
         case .info:
@@ -210,12 +210,12 @@ public class Logger: LoggingDelegate {
             case .view:
                 domainName = "View"
             }
-            Logger.shared.writeLogToFile(source: source,
+            AdvancedLogger.shared.writeLogToFile(source: source,
                                          level: level.rawValue.uppercased().first!,
                                          domain: domainName,
                                          queue: queueName,
                                          message: message)
-            Logger.shared.logDelegate?.log(message: message, level: level, domain: domain, source: source)
+            AdvancedLogger.shared.logDelegate?.log(message: message, level: level, domain: domain, source: source)
         }
     }
     
