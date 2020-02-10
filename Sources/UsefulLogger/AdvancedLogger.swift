@@ -172,15 +172,16 @@ public class AdvancedLogger: LoggingDelegate {
             minimumLevel = 3
         }
         var givenLogLevel = 0
+        
         switch level {
         case .verbose:
-            givenLogLevel = 1
+            givenLogLevel = 0
         case .info:
-            givenLogLevel = 2
+            givenLogLevel = 1
         case .warning:
-            givenLogLevel = 3
+            givenLogLevel = 2
         case .error:
-            givenLogLevel = 4
+            givenLogLevel = 3
         }
         
         if givenLogLevel >= minimumLevel {
