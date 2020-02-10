@@ -21,7 +21,7 @@
 // THE SOFTWARE.
 
 import Foundation
-import iOSCoreUsefulSDK
+import CoreUsefulSDK
 
 /// Useful Logger class with advanced logging features.
 public class Logger: LoggingDelegate {
