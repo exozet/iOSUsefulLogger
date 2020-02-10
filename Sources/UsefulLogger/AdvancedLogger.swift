@@ -149,7 +149,7 @@ public class AdvancedLogger: LoggingDelegate {
         let destPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
         let fullDestPath = NSURL(fileURLWithPath: destPath).appendingPathComponent("\(fileName).log")
         let fullDestPathString = fullDestPath!.path
-        if !FileManager.default.fileExists(atPath: fullDestPathString) {
+        if FileManager.default.fileExists(atPath: fullDestPathString) {
             do {
                 try FileManager.default.removeItem(atPath: fullDestPathString)
             } catch {
