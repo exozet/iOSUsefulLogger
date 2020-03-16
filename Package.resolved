@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "CoreUsefulSDK",
+        "repositoryURL": "https://github.com/exozet/iOSCoreUsefulSDK",
+        "state": {
+          "branch": null,
+          "revision": "8010ca19c2c8156afa78005fbea0c6c1d84ffd85",
+          "version": "1.1.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
