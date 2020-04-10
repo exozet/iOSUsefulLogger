@@ -95,7 +95,7 @@ public class AdvancedLogger: LoggingDelegate {
     /// Private shared instance.
     internal static let shared = AdvancedLogger()
     
-    private weak var logDelegate: LoggingDelegate?
+    internal weak var logDelegate: LoggingDelegate?
     
     /// Private initializer.
     private init() {
@@ -118,11 +118,11 @@ public class AdvancedLogger: LoggingDelegate {
     }
     
     /// Writes given log into log file.
-    private func writeLogToFile(source: String,
-                                level: Character,
-                                domain: String,
-                                queue: String,
-                                message: String) {
+    internal func writeLogToFile(source: String,
+                                 level: String,
+                                 domain: String,
+                                 queue: String,
+                                 message: String) {
         let dateStr = DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .medium)
         let logStr = String(format: "[\(dateStr)] \(level) >> \(source): \(message) [QUEUE: \(queue)] \n")
         handler?.seekToEndOfFile()
@@ -212,7 +212,7 @@ public class AdvancedLogger: LoggingDelegate {
                 domainName = "View"
             }
             AdvancedLogger.shared.writeLogToFile(source: source,
-                                         level: level.rawValue.uppercased().first!,
+                                         level: String(level.rawValue.uppercased().first!),
                                          domain: domainName,
                                          queue: queueName,
                                          message: message)
