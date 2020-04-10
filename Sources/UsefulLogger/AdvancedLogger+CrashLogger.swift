@@ -78,6 +78,7 @@ public extension AdvancedLogger {
             CrashLogger.appExceptionHandler = NSGetUncaughtExceptionHandler()
             NSSetUncaughtExceptionHandler(CrashLogger.ExceptionReceiver)
             CrashLogger.addSignals()
+            CrashLogger.isStarted = true
         }
         
         /// Saves crash logs into the log file if it's `true`.
