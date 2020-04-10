@@ -146,7 +146,7 @@ public extension AdvancedLogger {
                                                      level: "CRASH!",
                                                      domain: "Logger",
                                                      queue: queueName,
-                                                     message: "\(msg) \n STACK: \n \(stack.joined(separator: " \n"))")
+                                                     message: "\(msg) \n STACK: \n \(exception.callStackSymbols.joined(separator: " \n"))")
             }
             AdvancedLogger.shared.logDelegate?.log(message: "CRASH!! - \(msg)", level: .error,
                                                    domain: .app, source: source)
