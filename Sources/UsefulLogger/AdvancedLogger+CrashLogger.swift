@@ -148,7 +148,10 @@ public extension AdvancedLogger {
                                                      queue: queueName,
                                                      message: msg)
             }
-            AdvancedLogger.shared.logDelegate?.log(message: msg, level: .error, domain: .app, source: source)
+            AdvancedLogger.shared.logDelegate?.log(message: "CRASH!! - \(msg)", level: .error,
+                                                   domain: .app, source: source)
+            
+            CrashLogger.saveCrashLog(log)
         }
         
         private static let SignalReceiver : @convention(c) (Int32) -> Void = {
@@ -177,8 +180,10 @@ public extension AdvancedLogger {
                                                      queue: queueName,
                                                      message: msg)
             }
-            AdvancedLogger.shared.logDelegate?.log(message: msg, level: .error, domain: .app, source: source)
+            AdvancedLogger.shared.logDelegate?.log(message: "CRASH!! - \(msg)", level: .error,
+                                                   domain: .app, source: source)
             
+            CrashLogger.saveCrashLog(log)
             CrashLogger.terminateApp()
         }
         
