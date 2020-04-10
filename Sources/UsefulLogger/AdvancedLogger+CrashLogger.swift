@@ -146,7 +146,7 @@ public extension AdvancedLogger {
                                                      level: "CRASH!",
                                                      domain: "Logger",
                                                      queue: queueName,
-                                                     message: msg)
+                                                     message: "\(msg) \n STACK: \n \(stack.joined(separator: " \n"))")
             }
             AdvancedLogger.shared.logDelegate?.log(message: "CRASH!! - \(msg)", level: .error,
                                                    domain: .app, source: source)
@@ -178,7 +178,7 @@ public extension AdvancedLogger {
                                                      level: "CRASH!",
                                                      domain: "Logger",
                                                      queue: queueName,
-                                                     message: msg)
+                                                     message: "\(msg) \n STACK: \n \(stack.joined(separator: " \n"))")
             }
             AdvancedLogger.shared.logDelegate?.log(message: "CRASH!! - \(msg)", level: .error,
                                                    domain: .app, source: source)
