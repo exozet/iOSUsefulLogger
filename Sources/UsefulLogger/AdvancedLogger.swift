@@ -31,7 +31,15 @@ public class AdvancedLogger: LoggingDelegate {
     /// Name of the log file which will be stored in the device storage.
     public class var fileName: String {
         get { return AdvancedLogger.shared.logFileName }
-        set { AdvancedLogger.shared.logFileName = newValue }
+        
+        set {
+            let shared = AdvancedLogger.shared
+            if shared.logFileName != newValue {
+                shared.deleteLogFile(shared.logFileName)
+                shared.logFileName = newValue
+                shared.initLogFile()
+            }
+        }
     }
     
     /// Minimum level to write logs into file.
@@ -86,24 +94,24 @@ public class AdvancedLogger: LoggingDelegate {
     private var handler: FileHandle?
     
     /// Instance file name member.
-    private var logFileName: String = "DeviceLogs" {
-        didSet {
-            self.deleteLogFile(oldValue)
-            self.initLogFile()
-        }}
+    private var logFileName: String
     
     /// Private shared instance.
     internal static let shared = AdvancedLogger()
     
     internal weak var logDelegate: LoggingDelegate?
     
+    private static let kUserDefaultsLogFile = "UsefulLogger.AdvancedLogger.LogFileName"
+    
     /// Private initializer.
     private init() {
+        self.logFileName = UserDefaults.standard.value(forKey: AdvancedLogger.kUserDefaultsLogFile) as? String ?? "DeviceLogs"
         initLogFile()
     }
     
     /// Initializes log file.
     private func initLogFile() {
+        UserDefaults.standard.set(self.logFileName, forKey: AdvancedLogger.kUserDefaultsLogFile)
         let destPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
         let fullDestPath = NSURL(fileURLWithPath: destPath).appendingPathComponent("\(self.logFileName).log")
         let fullDestPathString = fullDestPath!.path
