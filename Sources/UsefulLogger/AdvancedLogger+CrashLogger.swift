@@ -63,6 +63,7 @@ public extension AdvancedLogger {
         
         /// Starts `CrashLogger` to listen, and returns old log if there is any.
         /// - returns: Old crash log if it is present.
+        @discardableResult
         public class func application(_ application: UIApplication,
                          didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> CrashLog? {
             CrashLogger.start()
