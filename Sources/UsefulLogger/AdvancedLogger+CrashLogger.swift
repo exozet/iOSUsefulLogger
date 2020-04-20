@@ -29,11 +29,11 @@ public extension AdvancedLogger {
     struct CrashLog {
         
         /// Name of the crash.
-        var name: String
+        public private(set) var name: String
         /// Reason for the crash.
-        var reason: String
+        public private(set) var reason: String
         /// Callstack of the crash.
-        var callStack: [String]
+        public private(set) var callStack: [String]
         
         fileprivate init(name: String, reason: String, callStack: [String]) {
             self.name = name
