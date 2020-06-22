@@ -22,5 +22,7 @@ let package = Package(
         .target(
             name: "UsefulLogger",
             dependencies: ["CoreUsefulSDK"]),
+//        .testTarget(name: "UsefulLoggerTests",
+//                    dependencies: ["CoreUsefulSDK", "UsefulLogger"])
     ]
 )
