@@ -54,14 +54,21 @@ public class AdvancedLogger: LoggingDelegate {
     /// Returns current log file size in MB.
     public class var currentFileSize: Int {
         get {
+            return AdvancedLogger.shared.fileSize
+        }
+    }
+    
+    /// Returns current log file size in MB. Private.
+    private var fileSize: Int {
+        get {
             let destPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-            let fullDestPath = NSURL(fileURLWithPath: destPath).appendingPathComponent("\(AdvancedLogger.shared.logFileName).log")
+            let fullDestPath = NSURL(fileURLWithPath: destPath).appendingPathComponent("\(self.logFileName).log")
             do {
                 let attributes = try FileManager.default.attributesOfItem(atPath: fullDestPath!.path)
                 let currentSize = (attributes[.size] as! NSNumber).intValue / (1024*1024)
                 return currentSize
             } catch {
-                AdvancedLogger.shared.log(message: "Couldn't read log file size - Error: \(error.localizedDescription)",
+                self.log(message: "Couldn't read log file size - Error: \(error.localizedDescription)",
                     level: .verbose, domain: .service, source: "AdvancedLogger")
                 return 0
             }
@@ -155,7 +162,7 @@ public class AdvancedLogger: LoggingDelegate {
     
     /// Checks log file size. If file size is more than the given limit, clears it.
     func checkFileSize() {
-        let currentSize = AdvancedLogger.currentFileSize
+        let currentSize = self.fileSize
         
         self.log(message: "Current log file size: \(currentSize) MB - Maximum Allowed: \(AdvancedLogger.maximumFileSize) MB",
             level: .verbose, domain: .service, source: "AdvancedLogger")
