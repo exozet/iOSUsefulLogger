@@ -20,8 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
+import Foundation
+#if !os(macOS)
 import UIKit
+#endif
 
 public extension AdvancedLogger {
     
@@ -61,25 +63,29 @@ public extension AdvancedLogger {
     /// Advanced Crash Logger to listen crash logs from the application and act.
     class CrashLogger {
         
+        #if !os(macOS) && !os(tvOS) && !os(watchOS)
+        
         /// Starts `CrashLogger` to listen, and returns old log if there is any.
         /// - returns: Old crash log if it is present.
         @discardableResult
         public class func application(_ application: UIApplication,
                          didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> CrashLog? {
-            CrashLogger.start()
-            return CrashLogger.checkCrashLogs()
+            return CrashLogger.start()
         }
+        
+        #endif
         
         /// Starts Crash Logger to listen crash logs.
         ///
         /// If `application:didFinishLaunchingWithOptions:` is called already, it's not needed to call that method too.
-        public class func start() {
-            guard !CrashLogger.isStarted else { return }
+        @discardableResult public class func start() -> CrashLog? {
+            guard !CrashLogger.isStarted else { return nil }
             
             CrashLogger.appExceptionHandler = NSGetUncaughtExceptionHandler()
             NSSetUncaughtExceptionHandler(CrashLogger.ExceptionReceiver)
             CrashLogger.addSignals()
             CrashLogger.isStarted = true
+            return CrashLogger.checkCrashLogs()
         }
         
         /// Saves crash logs into the log file if it's `true`.
